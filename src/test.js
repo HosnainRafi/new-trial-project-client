@@ -6,25 +6,32 @@ import { required, email, password, confirmPassword } from './validators';
 
 const EmployeeForm = () => {
   const [firstName, setFirstName] = useState('');
-  const [lastName, setLastName] = useState('');
-  const [emailAddress, setEmailAddress] = useState('');
+  const [familyName, setFamilyName] = useState('');
+  const [email, setEmail] = useState('');
+  const [address,setAddress] = useState('');
   const [passwordValue, setPasswordValue] = useState('');
   const [confirmPasswordValue, setConfirmPasswordValue] = useState('');
+  const [age,setAge] = useState('');
+  const [hired,setHired] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const history = useHistory();
 
   const handleSubmit = (event, errors) => {
     event.preventDefault();
-    if (errors && errors.length > 0) return;
+    if (errors && errors.length > 0) 
+    return;
 
     setIsSubmitting(true);
 
     const employee = {
       firstName: firstName,
-      lastName: lastName,
-      emailAddress: emailAddress,
+      familyName: familyName,
+      email: email,
+      address: address,
       password: passwordValue,
       confirmPassword: confirmPasswordValue,
+      age: age,
+      hired: hired,
     };
 
     fetch('/api/employees', {
@@ -51,17 +58,20 @@ const EmployeeForm = () => {
   const handleReset = () => {
     const hasData =
       firstName.trim() ||
-      lastName.trim() ||
-      emailAddress.trim() ||
+      familyName.trim() ||
+      email.trim() ||
       passwordValue.trim() ||
       confirmPasswordValue.trim();
     const resetConfirmed = window.confirm('Are you sure you want to reset the form?');
     if (resetConfirmed && hasData) {
       setFirstName('');
-      setLastName('');
-      setEmailAddress('');
+      setFamilyName('');
+      setEmail('');
+      setAddress('');
       setPasswordValue('');
       setConfirmPasswordValue('');
+      setAge('');
+      setHired(false);
     }
   };
 
@@ -88,13 +98,13 @@ const EmployeeForm = () => {
           </div>
           <div className="col-md-6">
             <div className="form-group">
-              <label htmlFor="lastName">Last Name:</label>
+              <label htmlFor="familyName">Family Name:</label>
               <Input
                 type="text"
-                name="lastName"
+                name="familyName"
                 className="form-control"
-                value={lastName}
-                onChange={(event) => setLastName(event.target.value)}
+                value={familyName}
+                onChange={(event) => setFamilyName(event.target.value)}
                 validations={[required]}
               />
             </div>
@@ -103,13 +113,13 @@ const EmployeeForm = () => {
         <div className="row">
         <div className="col-md-6">
         <div className="form-group">
-          <label htmlFor="emailAddress">Email Address:</label>
+          <label htmlFor="email">Email Address:</label>
           <Input
             type="email"
-            name="emailAddress"
+            name="email"
             className="form-control"
-            value={emailAddress}
-            onChange={(event) => setEmailAddress(event.target.value)}
+            value={email}
+            onChange={(event) => setEmail(event.target.value)}
             validations={[required, email]}
           />
         </div>
