@@ -13,10 +13,11 @@ const EmployeeForm = () => {
         hired: false,
     });
     const [isSubmitting, setIsSubmitting] = useState(false);
-    const history = useNavigate();
+    const navigate = useNavigate();
 
     const onChange = (e) => {
         setFormData({ ...formData, [e.target.name]: e.target.value });
+        //console.log({ ...formData, [e.target.name]: e.target.value });
     };
 
     const handleSubmit = async (e) => {
@@ -25,16 +26,19 @@ const EmployeeForm = () => {
 
         if (formIsValid()) {
             try {
-                const response = await fetch('http://localhost:5000/api/employees', {
+                fetch('http://localhost:5000/api/employees', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json'
                     },
                     body: JSON.stringify(formData)
-                });
+                }).then( res=> res.json())
+                .then(data => {
+                    console.log(data);
+                    
+                })
 
-                const data = await response.json();
-                console.log(data);
+                
 
                 setIsSubmitting(false);
                 Swal.fire({
@@ -43,7 +47,7 @@ const EmployeeForm = () => {
                     icon: 'success',
                     confirmButtonText: 'OK',
                 }).then(() => {
-                    history.push('/confirmation');
+                    navigate('/confirmation');
                 });
 
             } catch (error) {
