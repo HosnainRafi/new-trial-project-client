@@ -26,7 +26,7 @@ const EmployeeForm = () => {
     // Handle form submission
     const onSubmit = async (data) => {
         try {
-            const response = await fetch('https://new-trial-project-server.vercel.app/api/employees', {
+            const response = await fetch('https://new-trial-project-server.up.railway.app/api/employees', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
@@ -53,16 +53,6 @@ const EmployeeForm = () => {
         }
     };
 
-    /* // Handle reset confirmation dialog
-    const handleReset = () => {
-        
-        if (Object.values(register).some((reg) => reg.ref.value !== "")) {
-            setShowConfirmReset(true);
-            
-        } else {
-            handleShow();
-        }
-    }; */
 
     const isDisabled = Object.values(fields).every((value) => !value);
 
