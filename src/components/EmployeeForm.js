@@ -19,8 +19,11 @@ const schema = yup.object().shape({
 const EmployeeForm = () => {
 
     const [showConfirmReset, setShowConfirmReset] = useState(false);
-    const { register, handleSubmit, formState: { errors }, reset } = useForm({ resolver: yupResolver(schema) });
-    const navigate = useNavigate()
+    const handleClose = () => setShowConfirmReset(false);
+    const handleShow = () => setShowConfirmReset(true);
+    const { register, handleSubmit, formState: { errors }, reset,watch } = useForm({ resolver: yupResolver(schema) });
+    const navigate = useNavigate();
+    const fields = watch();
 
     // Handle form submission
     const onSubmit = async (data) => {
@@ -52,13 +55,37 @@ const EmployeeForm = () => {
         }
     };
 
-    // Handle reset confirmation dialog
+    /* // Handle reset confirmation dialog
     const handleReset = () => {
+        
         if (Object.values(register).some((reg) => reg.ref.value !== "")) {
             setShowConfirmReset(true);
+            
         } else {
-            reset();
+            handleShow();
         }
+    }; */
+
+    const isDisabled = Object.values(fields).every((value) => !value);
+
+    const handleReset = () => {
+        if (Object.values(fields).every((value) => value)) {
+            // All fields are blank, disable the reset button
+            return;
+        }
+
+        Swal.fire({
+            title: 'Are you sure you want to reset?',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonText: 'Yes',
+            cancelButtonText: 'No',
+            reverseButtons: true
+        }).then((result) => {
+            if (result.isConfirmed) {
+                reset();
+            }
+        });
     };
 
     return (
@@ -67,29 +94,8 @@ const EmployeeForm = () => {
                 <div className="col-md-6">
                     <h2>Create Employee</h2>
                     <hr />
-                    {/* Confirm reset dialog */}
-                    <Modal show={showConfirmReset} onHide={() => setShowConfirmReset(false)}>
-                        <Modal.Header closeButton>
-                            <Modal.Title>Confirm Reset</Modal.Title>
-                        </Modal.Header>
-                        <Modal.Body>Are you sure you want to reset all fields?</Modal.Body>
-                        <Modal.Footer>
-                            <Button variant="secondary" onClick={() => setShowConfirmReset(false)}>
-                                Cancel
-                            </Button>
-                            <Button
-                                variant="danger"
-                                onClick={() => {
-                                    reset();
-                                    setShowConfirmReset(false);
-                                }}
-                            >
-                                Reset
-                            </Button>
-                        </Modal.Footer>
-                    </Modal>
 
-                    {/* Employee form */}
+
                     <Form onSubmit={handleSubmit(onSubmit)} noValidate>
                         <Form.Group controlId="formName" className="mt-2">
                             <Form.Label>Name</Form.Label>
@@ -134,7 +140,7 @@ const EmployeeForm = () => {
 
                                 Submit
                             </Button>{" "}
-                            <Button variant="danger" type="button" onClick={handleReset}>
+                            <Button variant="danger" type="button" onClick={handleReset} disabled={isDisabled}>
                                 Reset
                             </Button>
                         </div>
