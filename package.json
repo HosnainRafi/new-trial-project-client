@@ -14,6 +14,7 @@
     "babel-loader": "^9.1.2",
     "bootstrap": "^5.2.3",
     "css-loader": "^6.7.3",
+    "firebase": "^9.17.2",
     "fluent-validation": "^0.2.0",
     "html-webpack-plugin": "^5.5.0",
     "react": "^18.2.0",

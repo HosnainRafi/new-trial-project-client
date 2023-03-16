@@ -2,10 +2,10 @@ import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { Button, Form, InputGroup, Modal } from "react-bootstrap";
+import { Button, Form } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
-import swal from "sweetalert";
+
 
 const schema = yup.object().shape({
     name: yup.string().required("Name is required").min(5, "Name must be at least 5 characters"),
@@ -18,9 +18,7 @@ const schema = yup.object().shape({
 
 const EmployeeForm = () => {
 
-    const [showConfirmReset, setShowConfirmReset] = useState(false);
-    const handleClose = () => setShowConfirmReset(false);
-    const handleShow = () => setShowConfirmReset(true);
+    
     const { register, handleSubmit, formState: { errors }, reset,watch } = useForm({ resolver: yupResolver(schema) });
     const navigate = useNavigate();
     const fields = watch();
@@ -28,7 +26,7 @@ const EmployeeForm = () => {
     // Handle form submission
     const onSubmit = async (data) => {
         try {
-            const response = await fetch('http://localhost:5000/api/employees', {
+            const response = await fetch('https://new-trial-project-server.vercel.app/api/employees', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
